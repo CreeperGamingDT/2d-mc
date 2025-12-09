@@ -1,0 +1,17 @@
+body {
+        margin: 0;
+        overflow: hidden;
+        background-color:#111;
+        justify-content: center;
+        display:flex;
+        width:100vw;
+        height:100vh;
+}
+canvas {
+        display: block;
+        object-fit: contain;
+        aspect-ratio: 1/1;
+        background-color:black;
+        border:3px solid #333;
+        border-radius: 10px;
+}
