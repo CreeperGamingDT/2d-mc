@@ -17,6 +17,6 @@ function tickupdates() {
     }
 }
 function updates() {
-    //updateplayer()
-      //updateCamera()
+    updateplayer()
+      updateCamera()
 }

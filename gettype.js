@@ -81,7 +81,7 @@ function isSelectionBlockType(type) {
     if (selectionAllowed.findIndex(x => x === type) !== -1) return true;
     return false;
 }
-function isBlockTransparent(type) {
+function isBlockInFront(type) {
     if (transparent.findIndex(x => x === type) !== -1) return true;
     return false;
 }
