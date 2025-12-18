@@ -76,6 +76,11 @@ function movement() {
     if (key['alt']) {
         handlePlacing()
     }
+    if (key['control']) {
+        handleBreaking()
+    } else {
+        player.mining = false;
+    }
 
     //!Fix jump/on ground detectiom
 
@@ -104,14 +109,23 @@ function playerselection() {
     const block = getBlockLookingAt()
     if (block !== null) {
         if (isSelectionBlockType(block.type)) {
+           
+            if (selectedBlock.progress <= 0
+                || !player.mining
+                || (block.x !== selectedBlock.x || block.y !== selectedBlock.y)
+            ) {
+                selectedBlock.progress = 0
+            }
+           
             selectedBlock.x = block.x
             selectedBlock.y = block.y
-            selectedBlock.progress = 0
+            selectedBlock.type = block.type
+
             selectedBlock.side = block.side
         } else {
             selectedBlock.progress = -1
         }
-        
+
     } else {
         selectedBlock.progress = -1
     }

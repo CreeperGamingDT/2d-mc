@@ -71,8 +71,10 @@ function getTerrain(x, thisy,getsurface=false) {
         if (x % 3 == 0) {
             if (ty == y_value + 1) {
                 if (seedrand.get(x) > 0.7) {
-
+                    if (!(x % chunksize === chunksize-1 || x % chunksize === 0 || x % chunksize === 1)) {
+                    
                     dec.push(...getStructure("oak_tree", x, ty))
+                    }
                 } else if (x % 80 == 0 && Math.abs(x) >= 200) {
                     if (seedrand.get(x) <= 0.5) {
                         //BUG,

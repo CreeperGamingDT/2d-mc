@@ -38,7 +38,8 @@ function getBlockLookingAt() {
         },
         player.head.r,
         generatedChunks,
-        25
+        player.placeReach/0.1,
+        0.1
     )
    // console.log(block)
     if (block !== null) {

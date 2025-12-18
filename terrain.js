@@ -18,12 +18,7 @@ let changedBlocks = {
     ]
 }
 
-//!DO NOT EDIT UNLESS YOU CHANGE LOADED CHUNK DATA INT SIZE (not made yet)
-const chunksize = 24;
 
-//i dont think you can change this without changing how the blocks work
-//just go into gettype.js
-const blocksize = 1;
 
 function playerToChunkPos(player) {
     const x = Math.floor(player.x / chunksize)
@@ -91,11 +86,16 @@ function getBlocksAround(block) {
     let nearChunksData = []
     nearChunks.forEach(chunkLoc => {
         const locToStr = `${chunkLoc.x},${chunkLoc.y}`
-        const nearChunkData = getBlocksInChunk(locToStr)
+        const nearChunkData = getBlocksInChunk(locToStr).map(x => [
+            x[0] + chunkLoc.x * chunksize,
+            x[1] + chunkLoc.y * chunksize,
+            x[2]
+        ])
         nearChunksData.push(...nearChunkData)
 
     })
 
+   // console.log(nearChunksData)
     //sort for blocks around block (in a + shape)
     return nearChunksData.filter((oblock) => isBlockAround(block, oblock))
 

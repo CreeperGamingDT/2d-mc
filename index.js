@@ -1,4 +1,4 @@
-window.onerror = (error, file, lineon) => console.error(error + ` (${lineon})`);
+window.onerror = (error, file, lineon) => console.error(error + ` (${file}, ${lineon})`);
 
 let shaderProgram;
 let gl;
@@ -9,6 +9,7 @@ let deltaTime;
 const selectedBlock = {
     x:0,
     y:0,
+    type:null,
     progress:-1,//0-3
     side:null
 }
@@ -34,6 +35,14 @@ const player = {
     sneaking:false,
     sneakSpeedReduce:0.2,
     sneakSpeedAirReduce:0.8,
+
+    placeReach:3,
+
+    mining:false,
+
+    heldItem:{
+        name:"stone_axe"
+    },
     
     vx:0,
     vy:0,
@@ -56,6 +65,14 @@ const player = {
 
     type:"player"
 }
+
+//!DO NOT EDIT UNLESS YOU CHANGE LOADED CHUNK DATA INT SIZE (not made yet)
+const chunksize = 24;
+
+//i dont think you can change this without changing how the blocks work
+//just go into gettype.js
+const blocksize = 1;
+
 setTimeout(()=>player.x=950,200)
 let enableSpectator = false;
 

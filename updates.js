@@ -11,6 +11,7 @@ function tickupdates() {
     removeExcessChunkData()
     doEntityAIs()
     //waterPhysics()
+    leavesPhysics()
 
     if (player.jumpcooldownIndex > 0) {
     player.jumpcooldownIndex -= 1

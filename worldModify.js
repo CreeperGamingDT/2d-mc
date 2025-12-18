@@ -1,12 +1,27 @@
 function handlePlacing() {
     const blockType = "gold"
-    console.log(selectedBlock)
+    //console.log(selectedBlock)
     const newpos = convertDirectionStringToVector(selectedBlock,selectedBlock.side,1)
     if (aabb({w:blocksize,h:blocksize,...newpos},player)) return
     changeBlock(newpos,blockType)
 }
 function handleBreaking() {
-    //const blockBreakToughness = getBlockBreakToughness(blockType)
+
+    if (selectedBlock.progress >= 0) {
+        player.mining = true;
+    }
+
+    const blockType = selectedBlock.type
+    const blockBreakToughness = getBlockBreakToughness(blockType)
+    const toolMultiplier = getBlockToolMultipler(blockType)
+
+    console.log(toolMultiplier)
+    
+    selectedBlock.progress += (1/blockBreakToughness)*toolMultiplier * deltaTime
+    
+    if (selectedBlock.progress >= 4) {
+        changeBlock(selectedBlock,"air")
+    }
 }
 function convertDirectionStringToVector(v,d,size=1) {
     if (d==="left") return {...v,x:v.x-size}
