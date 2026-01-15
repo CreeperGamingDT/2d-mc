@@ -178,7 +178,7 @@ const types = {
     },
 
     "oak_log:natural,up": {
-        color: rgbToNormalized(74, 59, 38, 1),
+        color: rgbToNormalized(74*1.2, 59*1.2, 38*1.2, 1),
         toughness:1.3,
         components: [
             "nocollision",     
@@ -271,7 +271,8 @@ const types = {
     },
 }
 const selectionAllowed = [
-    "oak_log:natural,up"
+    "oak_log:natural,up",
+    ...Object.keys(types)
 ]
 function hasComponent(type,compName) {
     return (types[type].components ?? []).includes(compName)

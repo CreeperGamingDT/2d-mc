@@ -5,12 +5,23 @@
   <meta charset="utf-8" />
   <title>Texertara</title>
 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
 
 </head>
 
 <body>
+  <div class="game">
   <canvas id="gl-canvas" width="720" height="720"></canvas>
+  <div id="ui">
+    <div class="npc">
+      <div id="npcInteract">
+        <i class="fa-solid fa-e"></i>
+      </div>
+    </div>
+  </div>
+  </div>
 
   <script src="modules/perlin.js"></script>
   <script src="modules/rand.js"></script>
@@ -27,7 +38,7 @@
 
   <script src="index.js"></script>
   <script src="gettype.js"></script>
-    <script src="terrain.js"></script>
+  <script src="terrain.js"></script>
   <script src="generateterrain.js"></script>
   <script src="updates.js"></script>
   <script src="player.js"></script>
@@ -43,6 +54,7 @@
   <script src="worldModify.js"></script>
   <script src="leaves.js"></script>
   <script src="getItemType.js"></script>
+  <script src="npc.js"></script>
 </body>
 
 </html>

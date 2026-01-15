@@ -73,7 +73,7 @@ const chunksize = 24;
 //just go into gettype.js
 const blocksize = 1;
 
-setTimeout(()=>player.x=950,200)
+//setTimeout(()=>player.x=950,200)
 let enableSpectator = false;
 
 const vsSource = `
@@ -362,6 +362,9 @@ function drawing() {
     //draw chunk back
     generatedChunks.forEach(x=>drawSquares(x.back))
 
+    //draw npcs
+    drawSquares(npcs)
+
     //draw player and head
     drawSquares([{...player,h:player.h-player.head.h},{
         ...player.head,
@@ -370,7 +373,8 @@ function drawing() {
         y:player.y+player.h-player.head.h
     }])
 
-    //drawSquares(renderEntities())
+    drawSquares(renderEntities())
+    
     
     generatedChunks.forEach(x=>drawSquares(x.front))
 
