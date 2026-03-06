@@ -18,6 +18,10 @@ function tickupdates() {
     }
 }
 function updates() {
+  
     updateplayer()
       updateCamera()
+    if (!npcDialogueRunningPromise) {
+      nearNPCcalculation()
+    }
 }

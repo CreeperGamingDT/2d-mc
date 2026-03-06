@@ -6,19 +6,34 @@
   <title>Texertara</title>
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="npc.css">
+  <!--<link rel="stylesheet" href="inventory.css">-->
 
 
 </head>
 
 <body>
   <div class="game">
-  <canvas id="gl-canvas" width="720" height="720"></canvas>
+  <canvas id="gl-canvas" width="1080" height="1080"></canvas>
   <div id="ui">
     <div class="npc">
       <div id="npcInteract">
         <i class="fa-solid fa-e"></i>
       </div>
+      <div id="npcDialogueBox" style="display: none; opacity:0">
+        <div class="text">
+          i am groot
+        </div>
+        <div class="profile"></div>
+        <div class="name">i can confirm groot is I</div>
+      </div>
+    </div>
+    <div id="hud">
+      <div id="hotbar" aria-label="Hotbar"></div>
     </div>
   </div>
   </div>
@@ -32,8 +47,9 @@
   <script src="modules/mouse.js"></script>
   <script src="modules/lerp.js"></script>
   <script src="modules/raycast.js"></script>
+  <script src="modules/waitUntil.js"></script>
 
-  <script src="modules/console.min.js"></script>
+ <!-- <script src="modules/console.min.js"></script>-->
 
 
   <script src="index.js"></script>
@@ -55,6 +71,7 @@
   <script src="leaves.js"></script>
   <script src="getItemType.js"></script>
   <script src="npc.js"></script>
+  <script src="ui.js"></script>
 </body>
 
 </html>

@@ -18,7 +18,7 @@ function playerphysics() {
     player.vy = Math.max(player.vy, -maxfall);
 
 
-    if ((key[' '] || key['w']) && player.vy > -player.jumpspeedgravitystop * deltaTime) {
+    if ((key[' '] || key['w']) && player.vy > -player.jumpspeedgravitystop * deltaTime  && !npcDialogueRunningPromise) {
         thisGravitySpeed -= player.jumpspeedgravity
 
     }
@@ -26,7 +26,7 @@ function playerphysics() {
         x: player.x,
         y: player.y,
     })) {
-        if (key[' '] || key['w']) {
+        if ((key[' '] || key['w']) && !npcDialogueRunningPromise) {
             player.vy = player.minjumpspeed
             player.jumpcooldownIndex = player.jumpcooldown
 
@@ -73,10 +73,10 @@ function movement() {
         player.sneaking = false;
     }
 
-    if (key['alt']) {
+    if (mouse[2]) {
         handlePlacing()
     }
-    if (key['control']) {
+    if (mouse[0]) {
         handleBreaking()
     } else {
         player.mining = false;
@@ -99,11 +99,14 @@ function movement() {
 }
 
 function updateplayer() {
-    movement()
+    if (!npcDialogueRunningPromise) {
+        movement()
+        playerselection()
+    }
 
     playerphysics()
     playerheadrotation()
-    playerselection()
+    
 }
 function playerselection() {
     const block = getBlockLookingAt()

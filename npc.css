@@ -1,0 +1,94 @@
+#npcInteract {
+        width: 4%;
+        aspect-ratio:1/1;
+        position:relative;
+        background-color: rgba(0, 0, 0, 0.67);
+        color:#fff;
+        font-size:2.35vh;
+        border-radius: 20%;
+        justify-content: center;
+        align-items: center;
+        display:flex;
+}
+#npcDialogueBox {
+    /* Hidden by default as per your example */
+    
+     
+    
+    /* Position & Size */
+    position: absolute;
+    left: 2%;
+    bottom: 25px;
+    transform: translate(0%);
+    width: calc(97%);
+    height: 150px;
+    
+    /* Layout */
+    padding: 15px;
+    padding-left: 150px; /* Space reserved for the name/image on the left */
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+    z-index:1;
+    
+    /* Visuals */
+    background-color: rgba(50, 50, 50, 0.5);
+    border: 10px solid rgba(10, 10, 10, 0.5);
+    border-radius: 5px;
+    color: #ddd;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: monospace;
+    
+    /* Interaction & Animation */
+    cursor: pointer;
+    pointer-events: none;
+    transition: opacity 1.5s ease-in-out;
+    display: flex;
+
+}
+#npcDialogueBox::after {
+    font-family: "Aldrich", monospace;
+    letter-spacing: 0.03em;
+    content: "";
+    position: absolute;
+    right: 18px;
+    bottom: 10px;
+    font-size: 0.9em;
+    font-weight: normal;
+    color: rgba(255,255,255,0.8);
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 120ms ease, transform 0.8s cubic-bezier(0, 0, 0, 1);
+}
+#npcDialogueBox.ready::after {
+    content: attr(data-ready-text);
+    opacity: 1;
+    transform: translateY(0);
+
+}
+#npcDialogueBox .name {
+    position: absolute;
+    left: 12.5px;
+    bottom: 7px; /* Adjust this to match your specific alignment needs */
+    width: 112.5px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+}
+
+#npcDialogueBox .profile {
+    position: absolute;
+    left: 23.5px;
+    bottom: 32px; /* Adjust this to match your specific alignment needs */
+    height: 85.5px;
+    aspect-ratio: 1/1;
+    background-color: blue;
+
+}
+#npcDialogueBox .text {
+    font-family: "Aldrich", monospace;
+    font-size: 1em;
+    letter-spacing: 0.0em;
+    /* This will stay in the padded area on the right */
+    line-height: 1.4;
+    word-wrap: break-word;
+}

@@ -16,7 +16,7 @@ leafBlocks.forEach(block=>{
 
     if (blocksAround.filter(block=>block[2].includes(
         [
-            "oak_log:natural,up",
+            "oak_log:natural",
         ]
     )).length > 0 ||
 blocksAround.filter(block=>block[2].includes(

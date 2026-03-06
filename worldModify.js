@@ -11,6 +11,7 @@ function handleBreaking() {
         player.mining = true;
     }
 
+
     const blockType = selectedBlock.type
     const blockBreakToughness = getBlockBreakToughness(blockType)
     const toolMultiplier = getBlockToolMultipler(blockType)
@@ -20,7 +21,8 @@ function handleBreaking() {
     selectedBlock.progress += (1/blockBreakToughness)*toolMultiplier * deltaTime
     
     if (selectedBlock.progress >= 4) {
-        changeBlock(selectedBlock,"air")
+        destroyDropBlock(selectedBlock)
+
     }
 }
 function convertDirectionStringToVector(v,d,size=1) {
@@ -29,4 +31,10 @@ function convertDirectionStringToVector(v,d,size=1) {
     if (d==="top") return {...v,y:v.y+size}
     if (d==="bottom") return {...v,y:v.y-size}
     return v
+}
+function destroyDropBlock() {
+    
+
+    //make block air
+    changeBlock(selectedBlock,"air")
 }

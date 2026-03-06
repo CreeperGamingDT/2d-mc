@@ -9,27 +9,27 @@ const structures = {
         [
             0,
             0,
-            "oak_log:natural,up"
+            "oak_log:natural"
         ],
         [
             0,
             1,
-            "oak_log:natural,up"
+            "oak_log:natural"
         ],
         [
             0,
             2,
-            "oak_log:natural,up"
+            "oak_log:natural"
         ],
         [
             0,
             3,
-            "oak_log:natural,up"
+            "oak_log:natural"
         ],
         [
             0,
             4,
-            "oak_log:natural,up"
+            "oak_log:natural"
         ],
         [
             1,

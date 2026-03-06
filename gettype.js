@@ -177,7 +177,7 @@ const types = {
         },
     },
 
-    "oak_log:natural,up": {
+    "oak_log:natural": {
         color: rgbToNormalized(74*1.2, 59*1.2, 38*1.2, 1),
         toughness:1.3,
         components: [
@@ -186,7 +186,20 @@ const types = {
         ],
         
     },
+    "oak_log": {
+        color: rgbToNormalized(74*1.2, 59*1.2, 38*1.2, 1),
+        toughness:1.3,
+        components: [     
+            "faster_break:axe"
+        ],
+        
+    },
     "oak_leaves:natural": {
+        toughness:0.2,
+        color: rgbToNormalized(10, 115, 0, 1),
+    },
+    "oak_leaves": {
+        toughness:0.2,
         color: rgbToNormalized(10, 115, 0, 1),
     },
 
@@ -270,11 +283,11 @@ const types = {
         toughness:1.75,
     },
 }
-const selectionAllowed = [
-    "oak_log:natural,up",
-    ...Object.keys(types)
+let selectionAllowed = [
+   // ...Object.keys(types)
 ]
 function hasComponent(type,compName) {
+    if (!type) return false
     return (types[type].components ?? []).includes(compName)
 }
 function isSelectionBlockType(type) {
@@ -289,6 +302,7 @@ function hasCollision(type) {
     return !hasComponent(type,"nocollision")
 }
 function getBlockBreakToughness(type) {
+    if (!type) return 0
     return types[type].toughness
 }
 function convertTypeToName(type) {
@@ -323,19 +337,34 @@ function convertNumberToType(numb) {
     return Object.keys(types)[numb]
 }
 
+function convertWorldToScreen(pos) {
+    //screen is a square
+    const psize = document.getElementById("ui").offsetHeight
+
+    const maxview = camera.viewSize
+ 
+    const cx = pos.x - camera.x
+    const cy = pos.y + camera.y
+
+    const screenX = (cx / maxview) * psize
+    const screenY = (cy / maxview) * psize
+
+    return {x:screenX,y:screenY}
+}
+
 function convertProgressToColor(color, progress) {
     const flooredProgress = Math.floor(progress)
     let toreturn = color;
 
     const progress1 = 0.07
     if (flooredProgress === 0) {
-        toreturn = color.map(x => x + progress1)
+        toreturn = color.map(x => x - 0.1)
     } else if (flooredProgress === 1) {
-        toreturn = color.map(x => x + 0.1)
+        toreturn = color.map(x => x - 0.15)
     } else if (flooredProgress === 2) {
-        toreturn = color.map(x => x + 0.25)
+        toreturn = color.map(x => x - 0.20)
     } else if (flooredProgress === 3) {
-        toreturn = color.map(x => x + 0.45)
+        toreturn = color.map(x => x - 0.30)
     }
     if (flooredProgress !== progress) {
         toreturn = [toreturn[0]+0.1-progress1,toreturn[1]-progress1,toreturn[2]-progress1,1]

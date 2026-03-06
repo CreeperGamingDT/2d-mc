@@ -90,6 +90,40 @@ const entitiesData = {
             h: 0.1,
             c: rgbToNormalized(224, 47, 213)
         },
+    ],
+    "capybara":[
+           {
+            //leg
+            x: 0,
+            y: 0,
+            w: 0.1,
+            h: 0.1,
+            c: rgbToNormalized(150, 12, 75)
+        },
+        {
+            //leg
+            x: 0.4,
+            y: 0,
+            w: 0.1,
+            h: 0.1,
+            c: rgbToNormalized(150, 12, 75)
+        },
+        {
+            //body
+            x: 0,
+            y: 0.1,
+            w: 0.6,
+            h: 0.3,
+            c: rgbToNormalized(219, 48, 158)
+        },
+        {
+            //head
+            x: 0.8,
+            y: 0.15,
+            w: 0.2,
+            h: 0.2,
+            c: rgbToNormalized(171, 51, 95)
+        },
     ]
 }
 const entitiesHitbox = {

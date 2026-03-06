@@ -19,3 +19,6 @@ function isPointInRect(point, rect) {
     point.y <= rect.y + rect.h
   );
 }
+function getCenter(rect) {
+  return {x:rect.x-rect.w/2,y:rect.y-rect.h/2}
+}

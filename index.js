@@ -5,6 +5,16 @@ let gl;
 let canvas;
 let buffers;
 let deltaTime;
+const npcInteractDiv = document.getElementById("npcInteract")
+const npcDialogueBoxDiv = document.getElementById("npcDialogueBox")
+const npcDialogueBox = {
+    name:npcDialogueBoxDiv.querySelector(".name"),
+    text:npcDialogueBoxDiv.querySelector(".text"),
+    profile:npcDialogueBoxDiv.querySelector(".profile"),
+}
+const npcInteractKey = "e"
+let npcDialogueRunningPromise = null
+
 
 const selectedBlock = {
     x:0,
@@ -41,9 +51,20 @@ const player = {
     mining:false,
 
     heldItem:{
-        name:"stone_axe"
+        //name:"stone_axe"
+    },
+    holdItemOffset:{
+        x:0.75,
+        fx: -0.4, //flipped
+        y:0.5
     },
     
+
+    inventory:[
+
+    ],
+    
+
     vx:0,
     vy:0,
     speed:5,
@@ -269,18 +290,20 @@ function convertRectToTexCoord(rect) {
         p2 = rotatePoint(p2.x,p2.y,cx,cy,r)
         p3 = rotatePoint(p3.x,p3.y,cx,cy,r)
         p4 = rotatePoint(p4.x,p4.y,cx,cy,r)
-    }
 
+        
+    }
+    rect.z = rect.z ?? 0
     
 
     const verticesTexCoords = [
-        p3.x, p3.y, 0,    1, 1, ...c, // Top Right
-        p4.x, p4.y, 0,      0, 1, ...c,// Top Left
-        p1.x, p1.y, 0,          0, 0, ...c,// Bottom Left
-               
-        p1.x, p1.y, 0,          0, 0, ...c,// Bottom Left
-        p2.x, p2.y, 0,      1, 0, ...c, // Bottom Right
-        p3.x, p3.y, 0,  1, 1, ...c, // Top Right
+        p3.x, p3.y, rect.z,    1, 1, ...c, // Top Right
+        p4.x, p4.y, rect.z,    0, 1, ...c,// Top Left
+        p1.x, p1.y, rect.z,    0, 0, ...c,// Bottom Left
+       
+        p1.x, p1.y, rect.z,    0, 0, ...c,// Bottom Left
+        p2.x, p2.y, rect.z,    1, 0, ...c, // Bottom Right
+        p3.x, p3.y, rect.z,    1, 1, ...c, // Top Right
          
 
 
@@ -291,23 +314,31 @@ function convertRectToTexCoord(rect) {
 }
 
 function bufferSquares(squares) {
-    // Combined array of [X, Y, Z, U, V, R, G, B, A] for a full-screen quad
-    const combinedData = []
+    const combinedData = [];
+
     squares.forEach(square => {
-
-
-        const verticesTexCoords = convertRectToTexCoord(square)
-        combinedData.push(...verticesTexCoords) 
-
-
-    })
-    
+        if (square.border && square.border.size > 0) {
+            const borderSquare = {
+                x: square.x - square.border.size,
+                y: square.y - square.border.size,
+                w: square.w + square.border.size * 2,
+                h: square.h + square.border.size * 2,
+                c: square.border.color ?? [1,1,1,1], // white
+            };
+            combinedData.push(...convertRectToTexCoord(borderSquare));
+        }
+        
+        //verticesTextCorrd
+        combinedData.push(...convertRectToTexCoord(square));
+    });
 
     const combinedBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, combinedBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(combinedData), gl.STATIC_DRAW);
 
+    return combinedBuffer;
 }
+
 function bufferSky() {
     const c2 = [0.67,1,1,1]
     const c =[0,0.8,1,1]
@@ -373,6 +404,8 @@ function drawing() {
         y:player.y+player.h-player.head.h
     }])
 
+    drawSquares(renderItems())
+
     drawSquares(renderEntities())
     
     
@@ -401,9 +434,10 @@ function loop(timestamp) {
     updates()
 
     drawing()
-
    
     requestAnimationFrame(loop)
+
+    clearKeyFrameState()
 }
 function tickloop() {
     tickupdates()
