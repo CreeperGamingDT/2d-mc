@@ -1,6 +1,7 @@
 //Incremental Ray
 function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1) {
     let detectedObject = null;
+    let detectedObjectIndex = -1;
     let iterations = 0;
     const ray = { x: origin.x, y: origin.y };
     let previousRay = { x: origin.x, y: origin.y }; // Store the position from the previous step
@@ -11,9 +12,11 @@ function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1
         iterations++;
 
         // Check if any objects colliding with ray point
-        for (const object of objects) { // Use a standard loop or 'for...of' so we can break early
+        for (let i = 0; i < objects.length; i++) { // Use a standard loop or 'for...of' so we can break early
+            const object = objects[i]
             if (isPointInRect(ray, object)) {
                 detectedObject = object;
+                detectedObjectIndex = i
                 // Once detected, we break out of the inner loop immediately
                 break;
             }
@@ -37,7 +40,7 @@ function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1
         // *** Logic to determine the hit side goes here ***
         const hitSide = determineHitSide(previousRay, detectedObject);
         // You can return an object containing both
-        return { object: detectedObject, side: hitSide };
+        return { object: detectedObject, side: hitSide, index:detectedObjectIndex };
     }
 
     return null; // Return null if nothing was hit
@@ -80,7 +83,7 @@ function determineHitSide(previousPos, rect) {
     }
 
     // This case shouldn't happen with correct logic, but good for debugging
-    return 'inside (error)';
+    return 'inside';
 }
 
 //LEARN TO USE GEOMETRICAL DDA (is that a GD reference)

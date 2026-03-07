@@ -289,9 +289,16 @@ function saveChunkData(chunkpos, blocks) {
     //loadedChunkData[`${chunkpos.x},${chunkpos.y}`] = Int32Array(loadedChunkData[`${chunkpos.x},${chunkpos.y}`].flat(1))
     // console.log([...loadedChunkData[`${chunkpos.x},${chunkpos.y}`]])
 }
-
+/**
+ * ALSO RETURNS PRE-LOADED CHUNKS
+ * @param {Object} chunkloc 
+ * @param {Number} chunkloc.x 
+ * @param {Number} chunkloc.y 
+ * @returns {Object}
+ * 
+*/
 function generateChunk(chunkloc) {
-
+    
     //// console.log('chs')
     generateEntities(chunkloc);
     //check if its in memory

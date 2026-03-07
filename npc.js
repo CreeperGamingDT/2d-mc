@@ -37,7 +37,7 @@ const npcDialogue = [
                 "They tried to fight him too.", "Ok...",
                 "The ground remembers each one who has vanished, and the wind still carries their last songs through the trees.", "",
                 "I will help you reclaim your strength. But before that, I have a few tasks for you to do before you start training.", "Which are?",
-                "First, take my axe. Go and chop down that tree for me and bring me back the logs so we can make your first tools. \\run{player.heldItem = {name:\"stone_axe\"}}", "Alright.",
+                "First, take my axe. Go and chop down that tree for me and bring me back the logs so we can make your first tools. \\run{player.heldItem[0] = {name:\"stone_axe\"}}", "Alright.",
             ],
             execute: ()=>{
                 selectionAllowed = ["oak_log:natural"]

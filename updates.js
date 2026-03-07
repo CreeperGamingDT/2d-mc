@@ -10,6 +10,7 @@ function updateCamera() {
 function tickupdates() {
     removeExcessChunkData()
     doEntityAIs()
+   
     //waterPhysics()
     leavesPhysics()
 
@@ -20,6 +21,7 @@ function tickupdates() {
 function updates() {
   
     updateplayer()
+     updateItemPhysics()
       updateCamera()
     if (!npcDialogueRunningPromise) {
       nearNPCcalculation()

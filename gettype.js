@@ -82,14 +82,14 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ]
     },
     "water:7": {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize:{
             x: 0,
@@ -102,7 +102,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize:{
             x: 0,
@@ -115,7 +115,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize:{
             x: 0,
@@ -128,7 +128,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize:{
             x: 0,
@@ -141,7 +141,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize: {
             x: 0,
@@ -154,7 +154,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize: {
             x: 0,
@@ -167,7 +167,7 @@ const types = {
         color: rgbToNormalized(0, 0, 255, 0.5),
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize: {
             x: 0,
@@ -182,15 +182,19 @@ const types = {
         toughness:1.3,
         components: [
             "nocollision",     
-            "faster_break:axe"
+            "faster_break:axe",
+            "backRender",
         ],
-        
+        drops:[
+            "oak_log"
+        ]
     },
     "oak_log": {
         color: rgbToNormalized(74*1.2, 59*1.2, 38*1.2, 1),
         toughness:1.3,
         components: [     
             "faster_break:axe"
+            
         ],
         
     },
@@ -208,7 +212,7 @@ const types = {
         toughness:1.5,
         components: [
             "nocollision",
-            "infrontRender",
+            ,
             "faster_break:pickaxe"
         ],
         customSize: {
@@ -223,7 +227,7 @@ const types = {
         toughness:1.5,
         components: [
             "nocollision",
-            "infrontRender",
+            ,
             "faster_break:pickaxe"
         ],
         customSize: {
@@ -238,7 +242,7 @@ const types = {
         toughness:1.5,
         components: [
             "nocollision",
-            "infrontRender",
+            ,
             "faster_break:pickaxe"
         ],
         customSize: {
@@ -253,7 +257,7 @@ const types = {
         toughness:1.5,
         components: [
             "nocollision",
-            "infrontRender",
+            ,
             "faster_break:pickaxe"
         ],
         customSize: {
@@ -268,7 +272,7 @@ const types = {
         toughness:1.5,
         components: [
             "nocollision",
-            "infrontRender",
+            ,
         ],
         customSize: {
             x: 0.1,
@@ -295,7 +299,7 @@ function isSelectionBlockType(type) {
     return false;
 }
 function isBlockInFront(type) {
-    return hasComponent(type,"infrontRender")
+    return !hasComponent(type,"backRender")
 }
 
 function hasCollision(type) {

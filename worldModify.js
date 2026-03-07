@@ -34,7 +34,13 @@ function convertDirectionStringToVector(v,d,size=1) {
 }
 function destroyDropBlock() {
     
+    if (types[selectedBlock.type]?.drops?.length > 0) {
 
+    types[selectedBlock.type].drops.forEach(dropName => {
+        addItemAtCenter(selectedBlock.x,selectedBlock.y,dropName)
+    });
+
+    }
     //make block air
     changeBlock(selectedBlock,"air")
 }

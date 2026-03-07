@@ -21,7 +21,7 @@ function getBlockLookingAt() {
     let generatedChunks = []
     
 
-    //*Subract camera so it doesnt have to process it non-relative
+    //*Subract camera so it doesnt have to process it non-relative/global coords
     nearChunks.forEach((pos) => generatedChunks.push(...generateChunk(pos).back.map(
         b => (
             {
@@ -45,6 +45,49 @@ function getBlockLookingAt() {
     if (block !== null) {
         const b = block.object
     return {...b,x:b.x+camera.x,y:b.y+camera.y,side:block.side}
+    } else {
+        return null;
+    }
+}
+function getItemLookingAt() {
+    const nearChunks = getNearChunks(player, chunksize / 2)
+
+    let allraycastcheck = []
+
+    //generate chunks
+    let generatedChunks = []
+    
+    
+
+    //*Subract camera so it doesnt have to process it non-relative/global coords
+    nearChunks.forEach((pos) => generatedChunks.push(...generateChunk(pos).back.map(
+        b => (
+            {
+                ...b,
+                x: b.x,
+                y: b.y
+            }
+        ))))
+    allraycastcheck.push(...generatedChunks)
+
+    //also add all items
+    allraycastcheck.push(...itementities)
+
+    const item = castRay(
+        {
+            x: player.x +player.w - player.head.w / 2,
+            y: player.y +player.h - player.head.h / 2
+        },
+        player.head.r,
+        allraycastcheck,
+        player.itemPickUpReach/0.1,
+        0.1
+    )
+    
+
+    if (item !== null && item.object.type == undefined) {
+        const b = item.object
+    return {...b,index:item.index-generatedChunks.length}
     } else {
         return null;
     }

@@ -1,3 +1,17 @@
+//PREFERENCES
+const ItemBorderColor_DEFAULT = [0,0,0,0.5]
+const ItemBorderColor_SELECTED = [0,0,0,0.8]
+const itemBorderSize_DEFAULT = 0.03
+const itemBorderSize_SELECTED = 0.05
+
+const itemBlockSize = 0.4
+
+
+
+//CONSTANTS FOR EASY ACCESS (DO NOT MODIFY)
+const toolItemHitbox = {w:0.55,h:0.55}
+const blockItemHitbox = {w:itemBlockSize,h:itemBlockSize}
+
 const itemTypeGroupColors = {
     "iron": rgbToNormalized(190, 190, 190),
     "stone": rgbToNormalized(130, 130, 130),
@@ -65,7 +79,8 @@ const itemTypes = {
                 c: itemTypeGroupColors.iron
             },
 
-        ]
+        ],
+        hitbox:toolItemHitbox
     },
     "stone_axe": {
         breakMultiplier: 2.2,
@@ -128,7 +143,8 @@ const itemTypes = {
                 c: itemTypeGroupColors.stone
             },
 
-        ]
+        ],
+        hitbox:toolItemHitbox
     },
     "oak_log": {
         breakMultiplier: 2.2,
@@ -137,31 +153,35 @@ const itemTypes = {
             {
                 x:0,
                 y:0,
-                w:0.2,
-                h:0.2,
+                w:itemBlockSize,
+                h:itemBlockSize,
                 c:types.oak_log.color
             }
-        ]
+        ],
+        hitbox:blockItemHitbox
     },
 }
 const itementities = [
+    //!TEMP
     {
         name:"oak_log",
         x:0,
         y:12,
+        vx:0,
+        vy:0,
+        w:itemBlockSize,
+        h:itemBlockSize,
     }
 ]
 let lastitementities = [
-    {
-        name:"oak_log",
-        x:0,
-        y:12,
-    }
 ]
-//
+
+
+
 
 function getBlockToolMultipler(blockType) {
-    const heldItemData = itemTypes[player.heldItem.name] ?? {}
+    //MAINHAND
+    const heldItemData = itemTypes[player.heldItem[0].name] ?? {}
 
     if (!heldItemData.type) return 1
 
@@ -173,18 +193,15 @@ function getBlockToolMultipler(blockType) {
 }
 function renderItem(item, x, y, flipped,border) {
     if (!item) throw Error(`Attempted to render an item that doesn't exist: Reading ${item}`);
-    const itemHitbox = {
-        w: 0.5,
-        h: 0.5,
-    }
 
     let itemTexture = item.textureData
+
 
 
     if (flipped) {
         itemTexture = itemTexture.map(d => ({
             ...d,
-            x: x + (itemHitbox.w - d.x),
+            x: x + (item.hitbox.w - d.x),
             y: y + d.y,
             w: -d.w,
             border
@@ -214,16 +231,29 @@ function renderItems() {
        lastitementities.forEach((lastitem, i) => {
             const lerpPos = lerp(lastitem, itementities[i], lerpTime);
             //add a lil border for effectionism
-            const itemTexture = renderItem(itemTypes[lastitem.name], lerpPos.x, lerpPos.y, false,{size:0.1,color:[0,0,0,0.5]})
+            const itemTexture = renderItem(
+                itemTypes[lastitem.name],
+                lerpPos.x,
+                lerpPos.y,
+                false,
+                {
+                    size:selectedItem.index===i?
+                    itemBorderSize_SELECTED:
+                    itemBorderSize_DEFAULT,
+                    color:selectedItem.index===i?
+                    ItemBorderColor_SELECTED:
+                    ItemBorderColor_DEFAULT
+                }
+            )
             allitems.push(...itemTexture)
         })
     //update lerp
     lastitementities = structuredClone(itementities)
 
-    //player held item
-    const heldItem = itemTypes[player.heldItem.name] ?? null
+    //player held item (MAINHAND)
+    const heldItemM = itemTypes[player.heldItem[0].name] ?? null
     //if there is one add it
-    if (heldItem) {
+    if (heldItemM) {
         let { x, y } = player
         const flipped = (player.vx < 0)
 
@@ -231,8 +261,48 @@ function renderItems() {
         x += player.holdItemOffset.x * !flipped
         x += player.holdItemOffset.fx * flipped //flipped offset
         y += player.holdItemOffset.y
-        const itemTexture = renderItem(heldItem, x, y, flipped)
+        const itemTexture = renderItem(heldItemM, x, y, flipped)
+        allitems.push(...itemTexture)
+    }
+
+    //player held item (OFFHAND)
+    const heldItemO = itemTypes[player.heldItem[1].name] ?? null
+    //if there is one add it
+    if (heldItemO) {
+        let { x, y } = player
+        const flipped = (player.vx < 0)
+
+        //offset 
+        x += (player.holdItemOffset.x-heldItemO.hitbox.w) * flipped
+        x += (player.holdItemOffset.fx+heldItemO.hitbox.w) * !flipped //flipped offset (INVERTED FROM MAINHAND)
+        y += player.holdItemOffset.y
+        const itemTexture = renderItem(heldItemO, x, y, flipped)
         allitems.push(...itemTexture)
     }
     return allitems
+}
+
+function addItemAt(x,y,name) {
+    if (!itemTypes[name]) throw Error("Item name does not exist, Reading: "+name)
+    itementities.push({
+        name,
+        x,
+        y,
+        vx:0,
+        vy:0,
+        w:itemTypes[name],
+        h:itemTypes[name]
+    })
+}
+function addItemAtCenter(x,y,name) {
+    if (!itemTypes[name]) throw Error("Item name does not exist, Reading: "+name)
+    itementities.push({
+        name,
+        x:x+itemTypes[name].hitbox.w/2,
+        y:y+itemTypes[name].hitbox.h/2,
+        vx:0,
+        vy:0,
+        w:itemTypes[name].hitbox.w,
+        h:itemTypes[name].hitbox.h
+    })
 }

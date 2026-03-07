@@ -15,6 +15,9 @@ const npcDialogueBox = {
 const npcInteractKey = "e"
 let npcDialogueRunningPromise = null
 
+const maxfallSpeed = 5000;
+const gravitySpeed = 100
+
 
 const selectedBlock = {
     x:0,
@@ -22,6 +25,14 @@ const selectedBlock = {
     type:null,
     progress:-1,//0-3
     side:null
+}
+let selectedItem = {
+    x:0,
+    y:0,
+    w:0,
+    h:0,
+    name:"",
+    index:-1,
 }
 
 const tickTime = 1000/20
@@ -47,12 +58,14 @@ const player = {
     sneakSpeedAirReduce:0.8,
 
     placeReach:3,
+    itemPickUpReach:3,
 
     mining:false,
 
-    heldItem:{
-        //name:"stone_axe"
-    },
+    heldItem:[
+        {},
+        {}
+    ],
     holdItemOffset:{
         x:0.75,
         fx: -0.4, //flipped
@@ -206,6 +219,10 @@ function initGl() {
     }
 
     shaderProgram = initShaderProgram(vsSource, fsSource);
+    buffers = {
+        squares: gl.createBuffer(),
+        sky: gl.createBuffer(),
+    };
 }
 function initShaderProgram(vsSource, fsSource) {
     const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
@@ -332,11 +349,10 @@ function bufferSquares(squares) {
         combinedData.push(...convertRectToTexCoord(square));
     });
 
-    const combinedBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, combinedBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(combinedData), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.squares);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(combinedData), gl.DYNAMIC_DRAW);
 
-    return combinedBuffer;
+    return combinedData.length / 9;
 }
 
 function bufferSky() {
@@ -346,8 +362,7 @@ function bufferSky() {
     const camx = -camera.x/dS*2
     const camy = -camera.y/dS*2
 
-    const skyBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER,skyBuffer)
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.sky)
     gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
         1-camx, 1-camy, 0,    1, 1, ...c, // Top Right
         -1-camx, 1-camy, 0,      0, 1, ...c,// Top Left
@@ -363,8 +378,8 @@ function drawSky() {
     drawToCanvas(6)
 }
 function drawSquares(squares) {
-    bufferSquares(squares)
-    drawToCanvas(squares.length*6)
+    const vertexCount = bufferSquares(squares)
+    drawToCanvas(vertexCount)
 }
 
 function drawToCanvas(vertices) {
@@ -377,7 +392,7 @@ function drawing() {
     gl.clearColor(1,1,1, 1);
     gl.clearDepth(1.0);
     const u_cameraUniformLocation = gl.getUniformLocation(shaderProgram, 'u_camera');
-    gl.uniform2fv(u_cameraUniformLocation,new Float32Array([camera.x/camera.viewSize,camera.y/camera.viewSize]))
+    gl.uniform2fv(u_cameraUniformLocation, new Float32Array([camera.x/camera.viewSize,camera.y/camera.viewSize]))
 
     //let it sky
     drawSky()
@@ -387,7 +402,10 @@ function drawing() {
 
     //generate chunks
     let generatedChunks = []
-     
+
+    
+
+    //get chunks
     nearChunks.forEach((pos)=>generatedChunks.push(generateChunk(pos)))
 
     //draw chunk back
@@ -404,11 +422,11 @@ function drawing() {
         y:player.y+player.h-player.head.h
     }])
 
-    drawSquares(renderItems())
+    drawSquares(renderItems()) 
 
     drawSquares(renderEntities())
     
-    
+    //draw chunks/blocks
     generatedChunks.forEach(x=>drawSquares(x.front))
 
    

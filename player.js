@@ -1,4 +1,3 @@
-const gravitySpeed = 100
 
 function playerphysics() {
 
@@ -13,12 +12,11 @@ function playerphysics() {
 
     //clamph
     const maxspeed = player.maxspeed * deltaTime;
-    const maxfall = 5000 * deltaTime
     player.vx = Math.min(Math.max(player.vx, -maxspeed), maxspeed);
-    player.vy = Math.max(player.vy, -maxfall);
+    player.vy = Math.max(player.vy, -maxfallSpeed*deltaTime);
 
 
-    if ((key[' '] || key['w']) && player.vy > -player.jumpspeedgravitystop * deltaTime  && !npcDialogueRunningPromise) {
+    if ((key[' '] || key['w']) && player.vy > -player.jumpspeedgravitystop * deltaTime && !npcDialogueRunningPromise) {
         thisGravitySpeed -= player.jumpspeedgravity
 
     }
@@ -73,10 +71,10 @@ function movement() {
         player.sneaking = false;
     }
 
-    if (mouse[2]) {
+    if (mouse.right) {
         handlePlacing()
     }
-    if (mouse[0]) {
+    if (mouse.left) {
         handleBreaking()
     } else {
         player.mining = false;
@@ -106,20 +104,33 @@ function updateplayer() {
 
     playerphysics()
     playerheadrotation()
-    
+
+    //item pickup
+    if (selectedItem.index !== -1 && mouse.left) {
+        pickupItem(selectedItem.index)
+    }
+    //item hotbar swap
+    if (key.pressed["z"]) {
+        swapHotbarSlots()
+    }
+
 }
 function playerselection() {
     const block = getBlockLookingAt()
+    const item = getItemLookingAt()
+
+
+    //block selection
     if (block !== null) {
         if (isSelectionBlockType(block.type)) {
-           
+
             if (selectedBlock.progress <= 0
                 || !player.mining
                 || (block.x !== selectedBlock.x || block.y !== selectedBlock.y)
             ) {
                 selectedBlock.progress = 0
             }
-           
+
             selectedBlock.x = block.x
             selectedBlock.y = block.y
             selectedBlock.type = block.type
@@ -131,5 +142,15 @@ function playerselection() {
 
     } else {
         selectedBlock.progress = -1
+    }
+
+    if (item !== null) {
+        //item selection
+        selectedItem = {
+            ...item,
+        }
+        
+    } else {
+        selectedItem.index = -1
     }
 }
