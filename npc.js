@@ -35,7 +35,7 @@ const npcDialogue = [
                 "Anyways where was I... Ah right. About you...", "Go on.",
                 "Your battle was great. A long, hard, and brave fight. But the Great Chompnelius the Second was no match for you", "So how did everyone die?",
                 "They tried to fight him too.", "Ok...",
-                "The ground remembers each one who has vanished, and the wind still carries their last songs through the trees.", "",
+                "The ground remembers each and every one who has vanished. The wind still carries their last songs through the trees.", "O_o",
                 "I will help you reclaim your strength. But before that, I have a few tasks for you to do before you start training.", "Which are?",
                 "First, take my axe. Go and chop down that tree for me and bring me back the logs so we can make your first tools. \\run{player.heldItem[0] = {name:\"stone_axe\"}}", "Alright.",
             ],

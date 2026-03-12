@@ -114,6 +114,11 @@ function updateplayer() {
         swapHotbarSlots()
     }
 
+    //item drop
+    if (key.pressed["q"]) {
+        dropHeldItem(0)
+    }
+
 }
 function playerselection() {
     const block = getBlockLookingAt()

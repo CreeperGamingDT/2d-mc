@@ -1,5 +1,5 @@
 //Incremental Ray
-function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1) {
+function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1,skipNoCollision=false) {
     let detectedObject = null;
     let detectedObjectIndex = -1;
     let iterations = 0;
@@ -14,7 +14,7 @@ function castRay(origin, direction, objects, maxIterations = 50, increment = 0.1
         // Check if any objects colliding with ray point
         for (let i = 0; i < objects.length; i++) { // Use a standard loop or 'for...of' so we can break early
             const object = objects[i]
-            if (isPointInRect(ray, object)) {
+            if (isPointInRect(ray, object) && (hasCollision(object.type??"")||!skipNoCollision)) {
                 detectedObject = object;
                 detectedObjectIndex = i
                 // Once detected, we break out of the inner loop immediately

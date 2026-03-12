@@ -81,7 +81,8 @@ function getItemLookingAt() {
         player.head.r,
         allraycastcheck,
         player.itemPickUpReach/0.1,
-        0.1
+        0.1,
+        true,
     )
     
 

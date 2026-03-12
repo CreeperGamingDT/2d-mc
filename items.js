@@ -254,13 +254,8 @@ function renderItems() {
     const heldItemM = itemTypes[player.heldItem[0].name] ?? null
     //if there is one add it
     if (heldItemM) {
-        let { x, y } = player
-        const flipped = (player.vx < 0)
-
-        //offset
-        x += player.holdItemOffset.x * !flipped
-        x += player.holdItemOffset.fx * flipped //flipped offset
-        y += player.holdItemOffset.y
+        const { x, y, flipped } = getHeldHandOffset(heldItemM,0)
+      
         const itemTexture = renderItem(heldItemM, x, y, flipped)
         allitems.push(...itemTexture)
     }
@@ -269,13 +264,8 @@ function renderItems() {
     const heldItemO = itemTypes[player.heldItem[1].name] ?? null
     //if there is one add it
     if (heldItemO) {
-        let { x, y } = player
-        const flipped = (player.vx < 0)
-
-        //offset 
-        x += (player.holdItemOffset.x-heldItemO.hitbox.w) * flipped
-        x += (player.holdItemOffset.fx+heldItemO.hitbox.w) * !flipped //flipped offset (INVERTED FROM MAINHAND)
-        y += player.holdItemOffset.y
+        const { x, y, flipped } = getHeldHandOffset(heldItemO,1)
+        
         const itemTexture = renderItem(heldItemO, x, y, flipped)
         allitems.push(...itemTexture)
     }
@@ -290,9 +280,27 @@ function addItemAt(x,y,name) {
         y,
         vx:0,
         vy:0,
-        w:itemTypes[name],
-        h:itemTypes[name]
+        w:itemTypes[name].hitbox.w,
+        h:itemTypes[name].hitbox.h
     })
+}
+function getHeldHandOffset(heldItem,slot) {
+    let { x, y } = player
+    const flipped = (player.vx < 0)
+    if (slot === 0) {
+        //offset
+        x += player.holdItemOffset.x * !flipped
+        x += player.holdItemOffset.fx * flipped //flipped offset
+        y += player.holdItemOffset.y
+    } else if (slot === 1) {
+
+
+        //offset 
+        x += (player.holdItemOffset.x-heldItem.hitbox.w) * flipped
+        x += (player.holdItemOffset.fx+heldItem.hitbox.w) * !flipped //flipped offset (INVERTED FROM MAINHAND)
+        y += player.holdItemOffset.y
+    }
+    return {x,y,flipped}
 }
 function addItemAtCenter(x,y,name) {
     if (!itemTypes[name]) throw Error("Item name does not exist, Reading: "+name)
